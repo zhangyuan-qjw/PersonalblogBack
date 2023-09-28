@@ -263,8 +263,10 @@ class FantasyView(ViewSet):
     @action(methods=['get'], detail=False, url_path='all_record')
     def get_all_recordMessages(self, request):
         # 获取所有FantasyRecord以及其惯量数据
-        records = FantasyRecord.objects.all()
-        serializer = FantasyRecordSerializer(records, many=True)
+        records = FantasyRecord.objects.all().order_by("-data")
+        paginator = FantasyPagination()
+        page = paginator.paginate_queryset(records, request)
+        serializer = FantasyRecordSerializer(page, many=True)
         for record in serializer.data:
             messages = FantasyMessage.objects.filter(record=record['id'])
             message_serializer = FantasyMessageSerializer(messages, many=True)
@@ -285,3 +287,10 @@ class FantasyView(ViewSet):
             return Response({"code": 200, "msg": "删除成功"})
         except FantasyRecord.DoesNotExist:
             return Response({"code": 400, "msg": "删除失败"})
+
+
+class FantasyPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'page_size'
+    page_query_param = 'page'
+    max_page_size = 10
