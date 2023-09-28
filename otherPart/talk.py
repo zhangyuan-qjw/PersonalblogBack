@@ -1,7 +1,7 @@
 import openai
 
 # 替换为您的API密钥
-openai.api_key = "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"
+openai.api_key = ""
 
 openai.proxy = 'https://cdn-p1-lm.baibianxiaoying.top:15160'
 
