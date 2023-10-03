@@ -10,8 +10,9 @@ db.sqlite3
 # 忽略日志文件
 *.log
 
-# 忽略运行时生成的文件
-/media/
+# 忽略静态文件
+/media/*
+!/media/.gitkeep
 
 # 忽略Django的静态文件收集目录
 staticfiles/
