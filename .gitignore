@@ -1,2 +1,17 @@
-media
-.gitignore
+# 忽略Python字节码文件
+__pycache__/
+
+# 忽略Django的migrations目录
+**/migrations/
+
+# 忽略数据库文件
+db.sqlite3
+
+# 忽略日志文件
+*.log
+
+# 忽略运行时生成的文件
+/media/
+
+# 忽略Django的静态文件收集目录
+staticfiles/

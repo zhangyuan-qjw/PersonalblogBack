@@ -265,7 +265,10 @@ class FantasyView(ViewSet):
         # 获取所有FantasyRecord以及其惯量数据
         records = FantasyRecord.objects.all().order_by("-data")
         paginator = FantasyPagination()
-        page = paginator.paginate_queryset(records, request)
+        try:
+            page = paginator.paginate_queryset(records, request)
+        except:
+            return Response({"code": 404, "msg": "已经是最后一页"})
         serializer = FantasyRecordSerializer(page, many=True)
         for record in serializer.data:
             messages = FantasyMessage.objects.filter(record=record['id'])
