@@ -34,7 +34,6 @@ class BlogView(GenericViewSet):
     @action(methods=['post'], detail=False, url_path='addArticle')
     def addArticle(self, request):
         article_data = request.data
-        print(article_data)
         # 添加文章
         articleSerializer = self.get_serializer(data=article_data)
         if articleSerializer.is_valid(raise_exception=True):
@@ -54,7 +53,6 @@ class BlogView(GenericViewSet):
     @action(methods=['put'], detail=False, url_path='updateArticle')
     def updateArticle(self, request):
         article_data = request.data
-        print(article_data)
         article_id = article_data.get('id')
         article = Article.objects.get(id=article_id)
         articleSerializer = self.get_serializer(article, data=article_data)
@@ -225,6 +223,7 @@ class FantasyView(ViewSet):
     def save_messages(self, request):
         data = request.data
         id = data.get('id')
+        print(data)
         if not id:
             uuid_id = uuid.uuid4()
             record_data = {'title': data.get('title'), 'id': uuid_id, 'image': data.get('image')}
@@ -233,8 +232,14 @@ class FantasyView(ViewSet):
                 RecordSerializer.save()
             messages = json.loads(data.get('messages'))
         else:
-            messages = data.get('messages')
+            id = id.strip('"')
             uuid_id = uuid.UUID(id)
+            record_data = {'title': data.get('title'), 'id': uuid_id, 'image': data.get('image')}
+            one_messages = FantasyRecord.objects.get(id=uuid_id)
+            RecordSerializer = FantasyRecordSerializer(one_messages, data=record_data)
+            if RecordSerializer.is_valid(raise_exception=True):
+                RecordSerializer.update(one_messages, RecordSerializer.validated_data)
+            messages = json.loads(data.get('messages'))
         new_messages = [{**d, 'record': uuid_id} for d in messages]
         MessageSerializer = FantasyMessageSerializer(data=new_messages, many=True)
         if MessageSerializer.is_valid(raise_exception=True):
@@ -243,7 +248,7 @@ class FantasyView(ViewSet):
 
     @action(methods=['get'], detail=False, url_path='record')
     def get_record(self, request):
-        FantasyRecord_data = FantasyRecord.objects.all()
+        FantasyRecord_data = FantasyRecord.objects.all().order_by("-data")
         FantasyRecord_serializer = FantasyRecordSerializer(FantasyRecord_data, many=True)
         return Response({"code": 200, "msg": "获取成功", "data": FantasyRecord_serializer.data})
 

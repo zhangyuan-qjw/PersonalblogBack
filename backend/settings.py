@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-te767$$@(8gh!t(2(=15z8ne5ys)3k7m5rpg&189as*may*f9q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["101.43.153.190", "127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["8.134.109.184", "127.0.0.1", "localhost"]
 
 # Application definition
 
@@ -87,6 +87,7 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': 'qjw123456',
         'HOST': 'localhost',
+        # 'HOST': '172.17.0.3',
         'PORT': '3306',
     }
 }
@@ -112,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "zh-CN"
 
 TIME_ZONE = "UTC"
 
@@ -156,17 +157,18 @@ CORS_ALLOW_HEADERS = [  # 允许的请求头
 ]
 
 # redis缓存配置
-CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',  # Redis服务器地址
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        }
-    }
-}
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django_redis.cache.RedisCache',
+#         'LOCATION': 'redis://127.0.0.1:6379/1',  # Redis服务器地址
+#         'OPTIONS': {
+#             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+#         }
+#     }
+# }
 
 # 使用Redis作为会话存储
+
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'default'
 
