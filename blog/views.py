@@ -7,6 +7,7 @@ from rest_framework.pagination import PageNumberPagination
 from .models import Article, FantasyRecord, FantasyMessage
 import json
 import uuid
+import os
 
 
 # 白化博客接口
@@ -223,7 +224,6 @@ class FantasyView(ViewSet):
     def save_messages(self, request):
         data = request.data
         id = data.get('id')
-        print(data)
         if not id:
             uuid_id = uuid.uuid4()
             record_data = {'title': data.get('title'), 'id': uuid_id, 'image': data.get('image')}
@@ -234,11 +234,15 @@ class FantasyView(ViewSet):
         else:
             id = id.strip('"')
             uuid_id = uuid.UUID(id)
-            record_data = {'title': data.get('title'), 'id': uuid_id, 'image': data.get('image')}
+            image = data.get('image')
             one_messages = FantasyRecord.objects.get(id=uuid_id)
-            RecordSerializer = FantasyRecordSerializer(one_messages, data=record_data)
-            if RecordSerializer.is_valid(raise_exception=True):
-                RecordSerializer.update(one_messages, RecordSerializer.validated_data)
+            if image:
+                record_data = {'title': data.get('title'), 'id': uuid_id, 'image': image}
+                image_path = one_messages.image.path
+                os.remove(image_path)
+                RecordSerializer = FantasyRecordSerializer(one_messages, data=record_data)
+                if RecordSerializer.is_valid(raise_exception=True):
+                    RecordSerializer.update(one_messages, RecordSerializer.validated_data)
             messages = json.loads(data.get('messages'))
         new_messages = [{**d, 'record': uuid_id} for d in messages]
         MessageSerializer = FantasyMessageSerializer(data=new_messages, many=True)
