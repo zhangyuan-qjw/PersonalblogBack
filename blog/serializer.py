@@ -66,5 +66,6 @@ class FantasyRecordSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.image = validated_data.get('image', instance.image)
+        instance.title = validated_data.get('title', instance.title)
         instance.save()
         return instance

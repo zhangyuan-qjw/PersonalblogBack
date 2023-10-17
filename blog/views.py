@@ -230,20 +230,24 @@ class FantasyView(ViewSet):
             RecordSerializer = FantasyRecordSerializer(data=record_data)
             if RecordSerializer.is_valid(raise_exception=True):
                 RecordSerializer.save()
-            messages = json.loads(data.get('messages'))
         else:
             id = id.strip('"')
             uuid_id = uuid.UUID(id)
             image = data.get('image')
+            print(data)
             one_messages = FantasyRecord.objects.get(id=uuid_id)
-            if image:
-                record_data = {'title': data.get('title'), 'id': uuid_id, 'image': image}
+            print(one_messages)
+            if image != 'undefined':
+                record_data = {'image': image, 'title': data.get('title')}
                 image_path = one_messages.image.path
                 os.remove(image_path)
-                RecordSerializer = FantasyRecordSerializer(one_messages, data=record_data)
-                if RecordSerializer.is_valid(raise_exception=True):
-                    RecordSerializer.update(one_messages, RecordSerializer.validated_data)
-            messages = json.loads(data.get('messages'))
+            else:
+                record_data = {'title': data.get('title')}
+                print(record_data)
+            RecordSerializer = FantasyRecordSerializer(one_messages, data=record_data, partial=True)
+            if RecordSerializer.is_valid(raise_exception=True):
+                RecordSerializer.update(one_messages, RecordSerializer.validated_data)
+        messages = json.loads(data.get('messages'))
         new_messages = [{**d, 'record': uuid_id} for d in messages]
         MessageSerializer = FantasyMessageSerializer(data=new_messages, many=True)
         if MessageSerializer.is_valid(raise_exception=True):
