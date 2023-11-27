@@ -19,29 +19,6 @@ class ArticleSerializer(serializers.ModelSerializer):
         return validated_data
 
 
-# class ChatMessageSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = ChatMessage
-#         fields = '__all__'
-#
-#     def create(self, validated_data):
-#         chat_message = ChatMessage.objects.create(**validated_data)
-#         return chat_message
-#
-#
-# class ChatSessionSerializer(serializers.ModelSerializer):
-#     messages = ChatMessageSerializer(many=True, read_only=True)
-#
-#     class Meta:
-#         model = ChatSession
-#         fields = '__all__'
-#         # extra_kwargs = {'messages': {'required': False}}
-#
-#     def create(self, validated_data):
-#         chat_session = ChatSession.objects.create(**validated_data)
-#         return chat_session
-
-
 class FantasyMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = FantasyMessage

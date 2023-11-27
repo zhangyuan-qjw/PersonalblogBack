@@ -85,7 +85,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'blog',
         'USER': 'root',
-        'PASSWORD': 'qjw123456',
+        'PASSWORD': 'Qjw123456',
         # 'HOST': 'localhost',
         'HOST': '172.17.0.2',
         'PORT': '3306',
@@ -155,17 +155,6 @@ CORS_ALLOW_HEADERS = [  # 允许的请求头
     'x-csrftoken',
     'x-requested-with',
 ]
-
-# redis缓存配置
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django_redis.cache.RedisCache',
-#         'LOCATION': 'redis://127.0.0.1:6379/1',  # Redis服务器地址
-#         'OPTIONS': {
-#             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-#         }
-#     }
-# }
 
 # 使用Redis作为会话存储
 
