@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Article, FantasyMessage, FantasyRecord
+from .models import Article, FantasyMessage, FantasyRecord, Philosophy
 
 
 class ArticleSerializer(serializers.ModelSerializer):
@@ -46,3 +46,13 @@ class FantasyRecordSerializer(serializers.ModelSerializer):
         instance.title = validated_data.get('title', instance.title)
         instance.save()
         return instance
+
+
+class PhilosophySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Philosophy
+        fields = '__all__'
+
+    def create(self, validated_data):
+        Philosophy.objects.create(**validated_data)
+        return validated_data

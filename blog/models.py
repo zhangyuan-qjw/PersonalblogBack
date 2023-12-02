@@ -1,8 +1,6 @@
 from django.db import models
 
 
-# Create your models here.
-
 class Article(models.Model):
     ARTICLE_TYPE_CHOICES = [
         ("albinism", "albinism"),
@@ -22,34 +20,6 @@ class Article(models.Model):
         return self.title
 
 
-# class ChatSession(models.Model):
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     now_role = models.CharField(max_length=20, default='白', verbose_name='当前会话的角色', null=True)
-#     chat_id = models.CharField(max_length=50, verbose_name='会话id', null=False, unique=True)
-#     # 其他会话相关字段
-#
-#
-# class ChatMessage(models.Model):
-#     USER_CHOICES = (
-#         ('白化', '白'),
-#         ('邱', '邱'),
-#         ('陈羽昂', '陈'),
-#         ('你', '你'),
-#         ('我', '我'),
-#     )
-#
-#     ROLE_CHOICES = (
-#         ("system", "system"),
-#         ("assistant", "assistant"),
-#         ("user", "user"),
-#     )
-#
-#     session = models.ForeignKey(ChatSession, on_delete=models.CASCADE)
-#     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
-#     content = models.TextField()
-#     user = models.CharField(max_length=20, choices=USER_CHOICES, verbose_name='角色', null=True)
-
-
 class FantasyRecord(models.Model):
     title = models.CharField(max_length=32, verbose_name='标题', null=False)
     data = models.DateTimeField(auto_now_add=True, verbose_name='发布时间')
@@ -62,3 +32,8 @@ class FantasyMessage(models.Model):
     message = models.TextField()
     record = models.ForeignKey(FantasyRecord, on_delete=models.CASCADE)
     time = models.DateTimeField(verbose_name='发布时间')
+
+
+class Philosophy(models.Model):
+    author = models.CharField(max_length=32, verbose_name='作者', null=False)
+    content = models.TextField(null=True)

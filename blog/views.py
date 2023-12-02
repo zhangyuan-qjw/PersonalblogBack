@@ -2,9 +2,9 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .serializer import ArticleSerializer, FantasyMessageSerializer, FantasyRecordSerializer
+from .serializer import ArticleSerializer, FantasyMessageSerializer, FantasyRecordSerializer, PhilosophySerializer
 from rest_framework.pagination import PageNumberPagination
-from .models import Article, FantasyRecord, FantasyMessage
+from .models import Article, FantasyRecord, FantasyMessage, Philosophy
 import json
 import uuid
 import os
@@ -39,9 +39,9 @@ class BlogView(GenericViewSet):
         articleSerializer = self.get_serializer(data=article_data)
         if articleSerializer.is_valid(raise_exception=True):
             articleSerializer.save()
-            return Response({'code': 200, 'data': 'success'})
+            return Response({'code': 200, 'data': '文章添加成功！'})
         else:
-            return Response({'code': 400, 'data': 'fail'})
+            return Response({'code': 400, 'data': '文章添加失败！'})
 
     @action(methods=['delete'], detail=False, url_path='deleteArticle')
     def deleteArticle(self, request):
@@ -168,4 +168,24 @@ class FantasyPagination(PageNumberPagination):
     page_query_param = 'page'
     max_page_size = 10
 
-# 幻想图片接口
+
+# 哲学接口
+class PhilosophyView(GenericViewSet):
+    queryset = Philosophy.objects.all()
+    serializer_class = PhilosophySerializer
+
+    @action(methods=['get'], detail=False, url_path='random_philosophy')
+    def random_philosophy(self, request):  # 随机获取philosophy
+        philosophy = self.queryset.order_by('?')[:1][0]
+        serializer = PhilosophySerializer(philosophy)
+        return Response({"code": 200, "msg": "获取成功", "data": serializer.data})
+
+    @action(methods=['post'], detail=False, url_path='addPhilosophy')
+    def addPhilosophy(self, request):
+        philosophy_data = request.data
+        philosophySerializer = self.get_serializer(data=philosophy_data)
+        if philosophySerializer.is_valid(raise_exception=True):
+            philosophySerializer.save()
+            return Response({'code': 200, 'data': '添加成功！'})
+        else:
+            return Response({'code': 400, 'data': '添加失败！'})
